@@ -83,7 +83,7 @@ func checkJSONVsSchemaRecursive(json interface{}, ty reflect.Type, jsonOk *bool)
 			// types but are JSON encoded as strings. We'll treat a string
 			// value for an array/slice as ok as far as validation here.
 		} else {
-			fmt.Fprintf(os.Stderr, "unexpected data format provided for object: %s",
+			fmt.Fprintf(os.Stderr, "unexpected data format provided for object: %s\n",
 				reflect.TypeOf(json))
 			*jsonOk = false
 		}
@@ -96,14 +96,14 @@ func checkJSONVsSchemaRecursive(json interface{}, ty reflect.Type, jsonOk *bool)
 				//e.Pop()
 			}
 		} else {
-			fmt.Fprintf(os.Stderr, "unexpected data format provided for object: %s",
+			fmt.Fprintf(os.Stderr, "unexpected data format provided for object: %s\n",
 				reflect.TypeOf(json))
 			*jsonOk = false
 		}
 
 	case reflect.Struct:
 		if items, ok := json.(map[string]interface{}); !ok {
-			fmt.Fprintf(os.Stderr, "unexpected data format provided for object: %s",
+			fmt.Fprintf(os.Stderr, "unexpected data format provided for object: %s\n",
 				reflect.TypeOf(json))
 			*jsonOk = false
 		} else {
@@ -123,7 +123,7 @@ func checkJSONVsSchemaRecursive(json interface{}, ty reflect.Type, jsonOk *bool)
 					}
 				}
 				if !found {
-					fmt.Fprintf(os.Stderr, "The entry \""+item+"\" is not an expected JSON object. Is it misspelled?")
+					fmt.Fprintf(os.Stderr, "The entry \""+item+"\" is not an expected JSON object. Is it misspelled?\n")
 					*jsonOk = false
 				}
 			}
