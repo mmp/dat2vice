@@ -10,6 +10,7 @@ files to convert as well as additional information about each one:
 - "label" gives the label that should be used for the map on the STARS DCB
 - "name" gives the full name of the map, as is used in _vice_ scenario definition files.
 - "id" gives the integer map number associated with the map.
+- "radius" (_optional_) if specified, gives a radius in nautical miles beyond which extra data in the map is culled.
 
 Here is an example:
 
@@ -27,7 +28,9 @@ Here is an example:
             "group": 0,
             "label": "XYZ MVA",
             "name": "XYZ AREA MVAS",
-            "id": 12
+            "id": 12,
+            "radius": 60
+
         },
 ]
 ```
@@ -37,6 +40,13 @@ the manifest file and the facility identifier for the maps:
 ```
 > dat2vice manifest.json ZXX
 ```
+
+You can also specify a culling radius via the `-radius` command-line option:
+```
+> dat2vice -radius 40 manifest.json ZXX
+```
+If `-radius` is given and per-map "radius" values are present, the per-map
+value takes precedence.
 
 If successful, `dat2vice` will generate two files in the current directory,
 `ZXX-manifest.gob` and `ZXX-videomaps.gob.zst`. These can be then be used

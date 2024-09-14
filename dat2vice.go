@@ -30,11 +30,12 @@ type STARSMap struct {
 }
 
 type ManifestMap struct {
-	Filename string `json:"filename"`
-	Group    int    `json:"group"`
-	Label    string `json:"label"`
-	Name     string `json:"name"`
-	Id       int    `json:"id"`
+	Filename string  `json:"filename"`
+	Group    int     `json:"group"`
+	Label    string  `json:"label"`
+	Name     string  `json:"name"`
+	Id       int     `json:"id"`
+	Radius   float32 `json:"radius"`
 }
 
 func main() {
@@ -74,6 +75,10 @@ func main() {
 
 	var maps []STARSMap
 	for _, m := range manifestMaps {
+		d := m.Radius
+		if d == 0 {
+			d = *maxDist
+		}
 		sm, err := makeMap(m, float32(*maxDist))
 		if err != nil {
 			fmt.Printf("%v\n", err)
