@@ -6,6 +6,7 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/gob"
+	"flag"
 	"fmt"
 	"io"
 	gomath "math"
@@ -37,12 +38,17 @@ type ManifestMap struct {
 }
 
 func main() {
-	if len(os.Args) != 3 {
-		fmt.Printf("usage: dat2vice <manifest-filename.json> <result basename>\n")
+	maxDist := flag.Float64("radius", 75, "distance in nautical miles beyond which map data is discarded")
+	flag.Parse()
+
+	if len(flag.Args()) != 2 {
+		fmt.Printf("usage: dat2vice [-radius r] <manifest-filename.json> <result basename>\n")
+		flag.PrintDefaults()
 		os.Exit(1)
 	}
 
-	f, err := os.Open(os.Args[1])
+	args := flag.Args()
+	f, err := os.Open(args[0])
 	if err != nil {
 		fmt.Printf("%v\n", err)
 		os.Exit(1)
@@ -68,7 +74,7 @@ func main() {
 
 	var maps []STARSMap
 	for _, m := range manifestMaps {
-		sm, err := makeMap(m)
+		sm, err := makeMap(m, float32(*maxDist))
 		if err != nil {
 			fmt.Printf("%v\n", err)
 			os.Exit(1)
@@ -83,7 +89,7 @@ func main() {
 	}
 
 	// Write the GOB file with everything
-	gf, err := os.Create(os.Args[2] + "-videomaps.gob.zst")
+	gf, err := os.Create(args[1] + "-videomaps.gob.zst")
 	if err != nil {
 		fmt.Printf("%v\n", err)
 		os.Exit(1)
@@ -106,7 +112,7 @@ func main() {
 	for _, m := range maps {
 		names[m.Name] = nil
 	}
-	mfn := os.Args[2] + "-manifest.gob"
+	mfn := args[1] + "-manifest.gob"
 	mf, err := os.Create(mfn)
 	if err != nil {
 		fmt.Printf("%v\n", err)
@@ -119,7 +125,7 @@ func main() {
 	}
 }
 
-func makeMap(mm ManifestMap) (STARSMap, error) {
+func makeMap(mm ManifestMap, maxDist float32) (STARSMap, error) {
 	sm := STARSMap{
 		Group: mm.Group,
 		Label: mm.Label,
@@ -200,7 +206,6 @@ func makeMap(mm ManifestMap) (STARSMap, error) {
 		return sm, fmt.Errorf("Center not found in DAT file")
 	}
 
-	const maxDist = 75 // TODO: make this configurable?
 	sm.Lines = FilterSlice(sm.Lines, func(strip []Point2LL) bool {
 		for _, p := range strip {
 			if nmdistance2ll(p, center) > maxDist {
