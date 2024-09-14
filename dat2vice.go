@@ -35,7 +35,7 @@ type ManifestMap struct {
 	Label    string  `json:"label"`
 	Name     string  `json:"name"`
 	Id       int     `json:"id"`
-	Radius   float32 `json:"radius"`
+	Radius   float64 `json:"radius"`
 }
 
 func main() {
