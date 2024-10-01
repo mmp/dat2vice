@@ -22,20 +22,31 @@ type Point2LL [2]float32
 
 // Note: this should match STARSMap in stars.go
 type STARSMap struct {
-	Group int
-	Label string
-	Name  string
-	Id    int
+	Label       string // for DCB
+	Group       int    // 0 -> A, 1 -> B
+	Name        string // For maps system list
+	Id          int
+	Category    int
+	Restriction struct {
+		Id        int
+		Text      [2]string
+		TextBlink bool
+		HideText  bool
+	}
+	Color int
 	Lines [][]Point2LL
 }
 
 type ManifestMap struct {
-	Filename string  `json:"filename"`
-	Group    int     `json:"group"`
-	Label    string  `json:"label"`
-	Name     string  `json:"name"`
-	Id       int     `json:"id"`
-	Radius   float64 `json:"radius"`
+	Filename string `json:"filename"`
+	Group    int    `json:"brightness"`
+	Category int    `json:"category"`
+	Label    string `json:"label"`
+	Name     string `json:"title"`
+	Id       int    `json:"number"`
+	Color    int    `json:"color"`
+
+	Radius float64 `json:"radius"`
 }
 
 func main() {
@@ -132,10 +143,22 @@ func main() {
 
 func makeMap(mm ManifestMap, maxDist float32) (STARSMap, error) {
 	sm := STARSMap{
-		Group: mm.Group,
-		Label: mm.Label,
-		Name:  mm.Name,
-		Id:    mm.Id,
+		Group:    mm.Group,
+		Label:    mm.Label,
+		Name:     mm.Name,
+		Id:       mm.Id,
+		Category: mm.Category,
+		Color:    mm.Color,
+	}
+
+	if mm.Group != 0 && mm.Group != 1 {
+		return sm, fmt.Errorf("\"brightness\" must be 0 or 1 for map %s", mm.Filename)
+	}
+	if mm.Color < 0 || mm.Color > 8 {
+		return sm, fmt.Errorf("\"color\" must be between 1 and 8 for map %s", mm.Filename)
+	}
+	if mm.Category < -1 || mm.Category > 9 {
+		return sm, fmt.Errorf("\"category\" must be between -1 and 9 for map %s", mm.Filename)
 	}
 
 	r, err := os.Open(mm.Filename)
