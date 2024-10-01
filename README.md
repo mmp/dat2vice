@@ -25,17 +25,17 @@ files to convert as well as additional information about each one:
   - 9: Processing areas
 - "radius" (_optional_) if specified, gives a radius in nautical miles beyond which extra data in the map is culled.
 
-For brightness group 0, here are the map colors:
-<table style="margin: auto;" border="1">
+For brightness group 0, the map are these RGB values:
+<table style="margin: auto;">
   <tr>
-    <td style="width: 30px; height: 30px; background-color: rgb(140,140,140);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(0, 255, 255);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(255, 0, 255);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(238, 201, 0);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(238, 106, 80);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(162, 205, 90);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(218, 165, 32);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(72, 118, 255);"></td>
+    <td>140, 140, 140</td>
+    <td>0, 255, 255</td>
+    <td>255, 0, 255</td>
+    <td>238, 201, 0</td>
+    <td>238, 106, 80</td>
+    <td>162, 205, 90</td>
+    <td>218, 165, 32</td>
+    <td>72, 118, 255</td>
   </tr>
   <tr>
     <td style="text-align:center;">1</td>
@@ -49,16 +49,16 @@ For brightness group 0, here are the map colors:
   </tr>
 </table><br>
 Here are the map colors for brightness group 1:
-<table style="margin: auto;" border="1">
+<table style="margin: auto;">
   <tr>
-    <td style="width: 30px; height: 30px; background-color: rgb(140,140,140);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(132,112,255);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(118,238,198);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(237,145,33);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(218,112,214);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(238,180,180);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(50,205,50);"></td>
-    <td style="width: 30px; height: 30px; background-color: rgb(255,106,106);"></td>
+    <td>140, 140, 140</td>
+    <td>132, 112, 255</td>
+    <td>118, 238, 198</td>
+    <td>237, 145, 33</td>
+    <td>218, 112, 214</td>
+    <td>238, 180, 180</td>
+    <td>50, 205, 50</td>
+    <td>255, 106, 106</td>
   </tr>
   <tr>
     <td style="text-align:center;">1</td>
