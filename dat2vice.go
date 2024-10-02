@@ -20,8 +20,8 @@ import (
 
 type Point2LL [2]float32
 
-// Note: this should match STARSMap in stars.go
-type STARSMap struct {
+// Note: this should match VideoMap in aviation.go
+type VideoMap struct {
 	Label       string // for DCB
 	Group       int    // 0 -> A, 1 -> B
 	Name        string // For maps system list
@@ -35,6 +35,12 @@ type STARSMap struct {
 	}
 	Color int
 	Lines [][]Point2LL
+}
+
+// Note: this should match VideoMapFile in aviation.go
+type VideoMapFile struct {
+	Maps           []VideoMap
+	ProvideAllMaps bool
 }
 
 type ManifestMap struct {
@@ -84,23 +90,23 @@ func main() {
 		os.Exit(1)
 	}
 
-	var maps []STARSMap
+	vmf := VideoMapFile{ProvideAllMaps: true}
 	for _, m := range manifestMaps {
 		d := m.Radius
 		if d == 0 {
 			d = *maxDist
 		}
-		sm, err := makeMap(m, float32(*maxDist))
+		sm, err := makeMap(m, d)
 		if err != nil {
 			fmt.Printf("%v\n", err)
 			os.Exit(1)
 		}
-		if slices.ContainsFunc(maps, func(m STARSMap) bool { return sm.Id == m.Id }) {
+		if slices.ContainsFunc(vmf.Maps, func(m VideoMap) bool { return sm.Id == m.Id }) {
 			fmt.Printf("Multiple maps have the same id: %d\n", sm.Id)
 			os.Exit(1)
 		}
 
-		maps = append(maps, sm)
+		vmf.Maps = append(vmf.Maps, sm)
 		fmt.Printf("read %s\n", m.Filename)
 	}
 
@@ -118,14 +124,14 @@ func main() {
 		os.Exit(1)
 	}
 	defer zw.Close()
-	if err = gob.NewEncoder(zw).Encode(maps); err != nil {
+	if err = gob.NewEncoder(zw).Encode(vmf); err != nil {
 		fmt.Printf("%v\n", err)
 		os.Exit(1)
 	}
 
 	// Write the manifest file (without the lines)
 	names := make(map[string]interface{})
-	for _, m := range maps {
+	for _, m := range vmf.Maps {
 		names[m.Name] = nil
 	}
 	mfn := args[1] + "-manifest.gob"
@@ -141,8 +147,8 @@ func main() {
 	}
 }
 
-func makeMap(mm ManifestMap, maxDist float32) (STARSMap, error) {
-	sm := STARSMap{
+func makeMap(mm ManifestMap, maxDist float32) (VideoMap, error) {
+	sm := VideoMap{
 		Group:    mm.Group,
 		Label:    mm.Label,
 		Name:     mm.Name,
