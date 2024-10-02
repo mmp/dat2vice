@@ -96,7 +96,7 @@ func main() {
 		if d == 0 {
 			d = *maxDist
 		}
-		sm, err := makeMap(m, d)
+		sm, err := makeMap(m, float32(d))
 		if err != nil {
 			fmt.Printf("%v\n", err)
 			os.Exit(1)
