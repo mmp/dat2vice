@@ -39,8 +39,7 @@ type VideoMap struct {
 
 // Note: this should match VideoMapFile in aviation.go
 type VideoMapFile struct {
-	Maps           []VideoMap
-	ProvideAllMaps bool
+	Maps []VideoMap
 }
 
 type ManifestMap struct {
@@ -90,7 +89,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	vmf := VideoMapFile{ProvideAllMaps: true}
+	vmf := VideoMapFile{}
 	for _, m := range manifestMaps {
 		d := m.Radius
 		if d == 0 {
